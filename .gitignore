@@ -1,0 +1,8 @@
+l
+debug
+*.o
+*.out
+output
+.vscode/
+*.gch
+test.txt
