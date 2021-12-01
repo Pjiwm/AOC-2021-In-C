@@ -6,8 +6,5 @@
 void day21() {
     const size_t LENGTH = 1;
     char* input[LENGTH];
-    file_to_array("inputs/day1.txt", input);
-    for(size_t i = 0; i < LENGTH; i++) {
-        printf("%s\n", input[i]);
-    }
+    // file_to_array("inputs/day1.txt", input);
 }
