@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h> 
 #include <math.h>
 #include "../helpers/file_reader.h"
 #include "../helpers/linked_list.h"
@@ -17,75 +18,56 @@ long binary_to_decimal(long binary) {
     return decimal;
 }
 
-long part2(char** input, const size_t LENGTH) {
-    String_Node* remaining_generator_nums = NULL;
-    String_Node* remaining_scrubber_nums = NULL;
+long part2(char** input, const size_t LENGTH, bool filter_majoriy) {
+    String_Node* remaining_options = NULL;
+    int size = LENGTH;
+    char* answer = malloc(sizeof(char) * strlen(input[0]));
 
-    int generator_size = LENGTH;
-    int scrubber_size = LENGTH;
-
-    // convert to linked list
-    for (size_t i = 0; i < generator_size; i++) {
-        str_insert_tail(&remaining_generator_nums, input[i]);
-    }
-
-    for (size_t i = 0; i < scrubber_size; i++) {
-        str_insert_tail(&remaining_scrubber_nums, input[i]);
+    for (size_t i = 0; i < size; i++) {
+        str_insert_tail(&remaining_options, input[i]);
     }
 
     for (size_t i = 0; i < strlen(input[0]) - 2; i++) {
 
         size_t one_count = 0;
-        for (String_Node* curr = remaining_generator_nums; curr != NULL; curr = curr->next) {
+        for (String_Node* curr = remaining_options; curr != NULL; curr = curr->next) {
             if (curr->value[i] == '1') {
                 one_count++;
             }
         }
 
-        size_t zero_count = 0;
-        for (String_Node* curr = remaining_scrubber_nums; curr != NULL; curr = curr->next) {
-            if (curr->value[i] == '0') {
-                zero_count++;
-            }
-        }
-        // for generator
-        char generator_filter = '1';
-        if (one_count < generator_size / 2) {
-            generator_filter = '0';
-        }
-        // for scrubber  
-        char scrubber_filter = '0';
-        if (zero_count > scrubber_size / 2) {
-            scrubber_filter = '1';
+        char filter = '1';
+        if (one_count < size / 2 && filter_majoriy) {
+            filter = '0';
         }
 
-        String_Node* new_generator_input = NULL;
-        generator_size = 0;
-        for (String_Node* curr = remaining_generator_nums; curr != NULL; curr = curr->next) {
-            if (curr->value[i] == generator_filter) {
-                str_insert_tail(&new_generator_input, curr->value);
-                generator_size++;
-            }
-        }
-        if (generator_size > 1) {
-            remaining_generator_nums = new_generator_input;
+        if (one_count > size / 2 && !filter_majoriy) {
+            filter = '0';
         }
 
-
-        String_Node* new_scrubber_input = NULL;
-        scrubber_size = 0;
-        for (String_Node* curr = remaining_scrubber_nums; curr != NULL; curr = curr->next) {
-            if (curr->value[i] == scrubber_filter) {
-                str_insert_tail(&new_scrubber_input, curr->value);
-                scrubber_size++;
+        String_Node* filtered_options = NULL;
+        str_deallocate(&filtered_options);
+        size = 0;
+        for (String_Node* curr = remaining_options; curr != NULL; curr = curr->next) {
+            if (curr->value[i] == filter) {
+                str_insert_tail(&filtered_options, curr->value);
+                size++;
             }
         }
-        if (scrubber_size > 1) {
-            remaining_scrubber_nums = new_scrubber_input;
+
+        if (size > 1) {
+            str_deallocate(&remaining_options);
+            remaining_options = filtered_options;
+        }
+        else {
+            answer = remaining_options->value;
+            return binary_to_decimal(atol(answer));
         }
 
     }
-    return (long)binary_to_decimal(atol(remaining_generator_nums->value)) * (long)binary_to_decimal(atol(remaining_scrubber_nums->value));
+    answer = remaining_options->value;
+    str_deallocate(&remaining_options);
+    return binary_to_decimal(atol(answer));
 }
 
 long part1(char** input, const size_t LENGTH) {
@@ -127,5 +109,5 @@ void day3() {
     char* input[LENGTH];
     file_to_array("inputs/day3.txt", input);
     printf("%ld\n", part1(input, LENGTH));
-    printf("%ld\n", part2(input, LENGTH));
+    printf("%ld\n", part2(input, LENGTH, true) * part2(input, LENGTH, false));
 }
