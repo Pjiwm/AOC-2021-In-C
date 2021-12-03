@@ -1,6 +1,6 @@
 #until day 25
-output: main.o file_reader.o linked_list.o hashtable.o array_sort.o array_copy.o solutions.o day1.o day2.o day3.o day4.o day5.o day6.o day7.o day8.o day9.o day10.o day11.o day12.o day13.o day14.o day15.o day16.o day17.o day18.o day19.o day20.o day21.o day22.o day23.o day24.o day25.o
-	gcc -g main.o file_reader.o linked_list.o hashtable.o array_sort.o array_copy.o day1.o day2.o day3.o day4.o day5.o day6.o day7.o day8.o day9.o day10.o day11.o day12.o day13.o day14.o day15.o day16.o day17.o day18.o day19.o day20.o day21.o day22.o day23.o day24.o day25.o -o output -lm
+output: main.o file_reader.o linked_list.o hashtable.o array_sort.o array_copy.o string_helper.o solutions.o day1.o day2.o day3.o day4.o day5.o day6.o day7.o day8.o day9.o day10.o day11.o day12.o day13.o day14.o day15.o day16.o day17.o day18.o day19.o day20.o day21.o day22.o day23.o day24.o day25.o
+	gcc -g main.o file_reader.o linked_list.o hashtable.o array_sort.o array_copy.o string_helper.o day1.o day2.o day3.o day4.o day5.o day6.o day7.o day8.o day9.o day10.o day11.o day12.o day13.o day14.o day15.o day16.o day17.o day18.o day19.o day20.o day21.o day22.o day23.o day24.o day25.o -o output -lm
 
 
 main.o: main.c
@@ -99,6 +99,9 @@ array_sort.o: helpers/array_sort.c helpers/array_helper.h
 
 array_copy.o: helpers/array_copy.c helpers/array_helper.h
 	gcc -c helpers/array_copy.c
+string_helper.o: helpers/string_helper.c helpers/string_helper.h
+	gcc -c helpers/string_helper.c
+
 
 clean:
 	rm *.o output debug

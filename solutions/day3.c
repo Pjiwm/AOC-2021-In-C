@@ -5,6 +5,7 @@
 #include <math.h>
 #include "../helpers/file_reader.h"
 #include "../helpers/linked_list.h"
+#include "../helpers/string_helper.h"
 
 long binary_to_decimal(long binary) {
     long decimal = 0, i = 0, remainder;
