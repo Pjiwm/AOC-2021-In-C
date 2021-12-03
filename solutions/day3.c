@@ -20,6 +20,8 @@ long binary_to_decimal(long binary) {
 
 long part2(char** input, const size_t LENGTH, bool filter_majoriy) {
     String_Node* remaining_options = NULL;
+    String_Node* filtered_options = NULL;
+
     int size = LENGTH;
     char* answer = malloc(sizeof(char) * strlen(input[0]));
 
@@ -45,8 +47,7 @@ long part2(char** input, const size_t LENGTH, bool filter_majoriy) {
             filter = '0';
         }
 
-        String_Node* filtered_options = NULL;
-        str_deallocate(&filtered_options);
+        filtered_options = NULL;
         size = 0;
         for (String_Node* curr = remaining_options; curr != NULL; curr = curr->next) {
             if (curr->value[i] == filter) {
@@ -63,8 +64,8 @@ long part2(char** input, const size_t LENGTH, bool filter_majoriy) {
             answer = remaining_options->value;
             return binary_to_decimal(atol(answer));
         }
-
     }
+
     answer = remaining_options->value;
     str_deallocate(&remaining_options);
     return binary_to_decimal(atol(answer));
@@ -104,7 +105,6 @@ long part1(char** input, const size_t LENGTH) {
 
 void day3() {
     printf("day3:\n");
-
     const size_t LENGTH = 1000;
     char* input[LENGTH];
     file_to_array("inputs/day3.txt", input);
